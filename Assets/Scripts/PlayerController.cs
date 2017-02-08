@@ -43,9 +43,8 @@ public class PlayerController : MonoBehaviour {
 
 	void Look(){
 		float angleLooking = Mathf.Deg2Rad * transform.rotation.eulerAngles.y;
-		Vector3 lookDirection = new Vector3 (Mathf.Cos (angleLooking), 0, Mathf.Sin (angleLooking));
-		Debug.DrawRay (transform.position, transform.position + lookDirection);
-		if (Physics.Raycast (transform.position, transform.position + lookDirection, lookDistance)) {
+		Vector3 lookDirection = new Vector3 (Mathf.Sin (angleLooking), 0, Mathf.Cos (angleLooking));
+		if (Physics.Raycast (transform.position, lookDirection, lookDistance)) {
 			Debug.Log ("saw a thing");
 		}
 	}
