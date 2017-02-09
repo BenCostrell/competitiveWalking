@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
 	private Rigidbody rb;
 	private int experienceEnjoyment;
 	private GameObject scoreUI;
+	private GameObject speedWarning;
 	private float timeUntilNextSpeedCheck;
 
 	// Use this for initialization
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour {
 		characterController = GetComponent<CharacterController> ();
 		rb = GetComponent<Rigidbody> ();
 		scoreUI = transform.GetChild (0).gameObject;
+		speedWarning = transform.GetChild (1).gameObject;
 		timeUntilNextSpeedCheck = 0;
 		experienceEnjoyment = 0;
 	}
@@ -70,6 +72,9 @@ public class PlayerController : MonoBehaviour {
 	void CheckIfImGoingTooFast(){
 		if (rb.velocity.magnitude > maxSpeed / 2) {
 			experienceEnjoyment -= 1;
+			speedWarning.SetActive (true);
+		} else {
+			speedWarning.SetActive (false);
 		}
 		UpdateScoreUI ();
 	}
