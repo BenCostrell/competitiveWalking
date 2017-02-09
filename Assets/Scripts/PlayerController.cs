@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
 	private GameObject scoreUI;
 	private GameObject speedWarning;
 	private float timeUntilNextSpeedCheck;
+	public LayerMask coolThingLayermask;
 
 	// Use this for initialization
 	void Start () {
@@ -28,11 +29,11 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Look ();
 		if (timeUntilNextSpeedCheck > 0) {
 			timeUntilNextSpeedCheck -= Time.deltaTime;
 		} else {
 			CheckIfImGoingTooFast ();
+			Look ();
 			timeUntilNextSpeedCheck = 0.5f;
 		}
 	}
@@ -64,8 +65,11 @@ public class PlayerController : MonoBehaviour {
 	void Look(){
 		float angleLooking = Mathf.Deg2Rad * transform.rotation.eulerAngles.y;
 		Vector3 lookDirection = new Vector3 (Mathf.Sin (angleLooking), 0, Mathf.Cos (angleLooking));
-		if (Physics.Raycast (transform.position, lookDirection, lookDistance)) {
-			Debug.Log ("saw a thing");
+		RaycastHit hit;
+		if (Physics.Raycast (transform.position, lookDirection, out hit, lookDistance, coolThingLayermask)) {
+			if (hit.collider.gameObject.GetComponent<CoolThingToLookAt> ().DrainPoint (playerNum)) {
+				experienceEnjoyment += 1;
+			}
 		}
 	}
 

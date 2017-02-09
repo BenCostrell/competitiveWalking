@@ -219,6 +219,9 @@ MonoBehaviour:
   maxSpeed: 10
   lookDistance: 10
   rotationSpeed: 1
+  coolThingLayermask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!20 &166048381
 Camera:
   m_ObjectHideFlags: 0
@@ -453,6 +456,9 @@ MonoBehaviour:
   maxSpeed: 10
   lookDistance: 10
   rotationSpeed: 1
+  coolThingLayermask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!20 &247305473
 Camera:
   m_ObjectHideFlags: 0
@@ -933,7 +939,8 @@ GameObject:
   - component: {fileID: 2033673059}
   - component: {fileID: 2033673058}
   - component: {fileID: 2033673057}
-  m_Layer: 0
+  - component: {fileID: 2033673061}
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1003,3 +1010,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2033673061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2033673056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fe4bbafc00e2ca45b3a4a65f41e8381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
