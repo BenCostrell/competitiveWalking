@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
@@ -12,8 +13,8 @@ public class PlayerController : MonoBehaviour {
 	public float rotationSpeed;
 	private Rigidbody rb;
 	private int experienceEnjoyment;
-	private GameObject scoreUI;
-	private GameObject speedWarning;
+	public GameObject scoreUI;
+	public GameObject speedWarning;
 	private float timeUntilNextSpeedCheck;
 	public LayerMask coolThingLayermask;
 
@@ -21,8 +22,6 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		characterController = GetComponent<CharacterController> ();
 		rb = GetComponent<Rigidbody> ();
-		scoreUI = transform.GetChild (0).gameObject;
-		speedWarning = transform.GetChild (1).gameObject;
 		timeUntilNextSpeedCheck = 0;
 		experienceEnjoyment = 0;
 	}
@@ -46,7 +45,6 @@ public class PlayerController : MonoBehaviour {
 	void Move(){
 		Vector3 inputDirection = new Vector3 (Input.GetAxis ("Horizontal_P" + playerNum), 0, Input.GetAxis ("Vertical_P" + playerNum));
 		Vector3 movementDirection = Quaternion.Euler (transform.rotation.eulerAngles) * inputDirection;
-		Debug.Log (rb.velocity.magnitude);
 		if (Vector3.Dot(rb.velocity, movementDirection.normalized) < maxSpeed) {
 			rb.AddForce (accel * movementDirection);
 		} else {
@@ -75,7 +73,7 @@ public class PlayerController : MonoBehaviour {
 
 	void CheckIfImGoingTooFast(){
 		if (rb.velocity.magnitude > maxSpeed / 2) {
-			experienceEnjoyment -= 1;
+			experienceEnjoyment -= 5;
 			speedWarning.SetActive (true);
 		} else {
 			speedWarning.SetActive (false);
@@ -84,6 +82,6 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void UpdateScoreUI(){
-		scoreUI.GetComponent<TextMesh> ().text = experienceEnjoyment.ToString();
+		scoreUI.GetComponent<Text> ().text = experienceEnjoyment.ToString();
 	}
 }

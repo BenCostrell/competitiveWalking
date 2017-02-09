@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class CoolThingToLookAt : MonoBehaviour {
 
-	private int pointsLeftForPlayer1;
-	private int pointsLeftForPlayer2;
+	public static int pointValue = 10;
+	private int pointsRemaining;
+	private bool depleted;
 
 	// Use this for initialization
 	void Start () {
-		int points = 10;
-		pointsLeftForPlayer1 = points;
-		pointsLeftForPlayer2 = points;
+		pointsRemaining = pointValue;
 	}
 	
 	// Update is called once per frame
@@ -21,16 +20,12 @@ public class CoolThingToLookAt : MonoBehaviour {
 
 	public bool DrainPoint(int playerNum){
 		bool pointDrained = false;
-		if (playerNum == 1) {
-			if (pointsLeftForPlayer1 > 0) {
-				pointsLeftForPlayer1 -= 1;
-				pointDrained = true;
-			}
-		} else if (playerNum == 2) {
-			if (pointsLeftForPlayer2 > 0) {
-				pointsLeftForPlayer2 -= 1;
-				pointDrained = true;
-			}
+		if (pointsRemaining > 0) {
+			pointsRemaining -= 1;
+			pointDrained = true;
+		} else if (!depleted) {
+			depleted = true;
+			Destroy (transform.GetChild (4).gameObject);
 		}
 		return pointDrained;
 	}
