@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour {
 
 	private CharacterController characterController;
+	private GameManager gameManager;
 	public int playerNum;
 	public float accel;
 	public float maxSpeed;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour {
 	public GameObject speedWarning;
 	private float timeUntilNextSpeedCheck;
 	public LayerMask coolThingLayermask;
+	private AudioSource buzzer;
 
 	// Use this for initialization
 	void Start () {
@@ -24,22 +26,32 @@ public class PlayerController : MonoBehaviour {
 		rb = GetComponent<Rigidbody> ();
 		timeUntilNextSpeedCheck = 0;
 		experienceEnjoyment = 0;
+		gameManager = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager> ();
+		buzzer = GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (timeUntilNextSpeedCheck > 0) {
-			timeUntilNextSpeedCheck -= Time.deltaTime;
-		} else {
-			CheckIfImGoingTooFast ();
+		if (!gameManager.gameOver) {
 			Look ();
-			timeUntilNextSpeedCheck = 0.5f;
+			if (timeUntilNextSpeedCheck > 0) {
+				timeUntilNextSpeedCheck -= Time.deltaTime;
+			} else {
+				CheckIfImGoingTooFast ();
+				timeUntilNextSpeedCheck = 0.5f;
+				if (experienceEnjoyment >= 100) {
+					UpdateScoreUI ();
+					gameManager.EndGame (playerNum);
+				}
+			}
 		}
 	}
 
 	void FixedUpdate(){
-		Move ();
-		RotateView ();
+		if (!gameManager.gameOver) {
+			Move ();
+			RotateView ();
+		}
 	}
 
 	void Move(){
@@ -65,8 +77,13 @@ public class PlayerController : MonoBehaviour {
 		Vector3 lookDirection = new Vector3 (Mathf.Sin (angleLooking), 0, Mathf.Cos (angleLooking));
 		RaycastHit hit;
 		if (Physics.Raycast (transform.position, lookDirection, out hit, lookDistance, coolThingLayermask)) {
-			if (hit.collider.gameObject.GetComponent<CoolThingToLookAt> ().DrainPoint (playerNum)) {
-				experienceEnjoyment += 1;
+			CoolThingToLookAt coolThing = hit.collider.gameObject.GetComponent<CoolThingToLookAt> ();
+			coolThing.isBeingLookedAt = true;
+			if (timeUntilNextSpeedCheck <= 0) {
+				if (coolThing.DrainPoint (playerNum)) {
+					experienceEnjoyment += 1;
+					UpdateScoreUI ();
+				}
 			}
 		}
 	}
@@ -75,8 +92,12 @@ public class PlayerController : MonoBehaviour {
 		if (rb.velocity.magnitude > maxSpeed / 2) {
 			experienceEnjoyment -= 5;
 			speedWarning.SetActive (true);
+			buzzer.Play ();
 		} else {
 			speedWarning.SetActive (false);
+			if (buzzer.isPlaying) {
+				buzzer.Stop ();
+			}
 		}
 		UpdateScoreUI ();
 	}
