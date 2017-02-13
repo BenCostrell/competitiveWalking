@@ -1091,12 +1091,12 @@ MonoBehaviour:
   player1Warning: {fileID: 1275580258}
   player2Warning: {fileID: 1441967465}
   winScreen: {fileID: 1587338043}
-  minAcceptableDistance: 5
-  numCoolThings: 50
-  xMin: -30
-  xMax: 30
-  zMin: -30
-  zMax: 30
+  minAcceptableDistance: 10
+  numCoolThings: 30
+  xMin: -45
+  xMax: 45
+  zMin: -45
+  zMax: 45
   gameOver: 0
 --- !u!4 &1953104347
 Transform:
